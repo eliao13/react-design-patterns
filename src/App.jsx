@@ -1,10 +1,17 @@
 import "./App.css";
+import CurrentUserLoader from "./container-components/CurrentUserLoader";
+import DataSource from "./container-components/DataSource";
+import ProductInfo from "./container-components/ProductInfo";
+import ResourceLoader from "./container-components/ResourceLoader";
+import UserInfo from "./container-components/UserInfo";
+import UserLoader from "./container-components/UserLoader";
 import RegularList from "./layout-components/list-components/RegularList";
 import LargePersonListItem from "./layout-components/list-components/people/LargePersonListItem";
 import SmallPersonListItem from "./layout-components/list-components/people/SmallPersonListItem";
 import LargeProductListItem from "./layout-components/list-components/product/LargeProductListItem";
 import NumberedList from "./layout-components/list-components/product/NumberedList";
 import SmallProductListItem from "./layout-components/list-components/product/SmallProductListItem";
+import Modal from "./layout-components/modal-components/Modal";
 import SplitScreen from "./layout-components/split-screen-components/SplitScreen";
 
 //* Split Screen Layout Component
@@ -59,9 +66,31 @@ const products = [
   },
 ];
 
+//* Container Components
+function getServerData(url) {
+  return fetch(url).then((response) => response.json());
+}
+
+function getLocalStorageData(key) {
+  return new Promise((resolve) => {
+    const data = localStorage.getItem(key);
+    resolve(data);
+  });
+}
+
+function TextComponent({ message }) {
+  return <h1>{message}</h1>;
+}
+
 function App() {
   return (
     <>
+      <a href="#layout-components">Layout Components</a>
+      <a href="#container-components">Container Components</a>
+      <a href=""></a>
+
+      <h1 id="layout-components">Layout Components</h1>
+
       <SplitScreen leftWeight={1} rightWeight={3}>
         <LeftHandComponent name="Eli" />
         <RightHandComponent message="Hello" />
@@ -92,6 +121,62 @@ function App() {
         resourceName={"product"}
         itemComponent={LargeProductListItem}
       />
+
+      <Modal>
+        <LargeProductListItem product={products[0]} />
+      </Modal>
+
+      {/* Container components take care of all of the data loading and other data manangement for their child components.
+          This allows child components to share logic and make it so they don't need to know where their data is coming from or how to manage it.
+      */}
+
+      <h1 id="container-components">Container Components</h1>
+
+      <CurrentUserLoader>
+        <UserInfo />
+      </CurrentUserLoader>
+
+      <UserLoader userId={2}>
+        <UserInfo />
+      </UserLoader>
+
+      <UserLoader userId={4}>
+        <UserInfo />
+      </UserLoader>
+
+      <UserLoader userId={6}>
+        <UserInfo />
+      </UserLoader>
+
+      {/* Resource Loader component allows for loading different types of resources from a server */}
+
+      <ResourceLoader
+        resourceUrl="http://dummyjson.com/users/1"
+        resourceName="user"
+      >
+        <UserInfo />
+      </ResourceLoader>
+
+      <ResourceLoader
+        resourceUrl="http://dummyjson.com/products/1"
+        resourceName="product"
+      >
+        <ProductInfo />
+      </ResourceLoader>
+
+      <DataSource
+        getDataFunc={() => getServerData("http://dummyjson.com/users/10")}
+        resourceName="user"
+      >
+        <UserInfo />
+      </DataSource>
+
+      <DataSource
+        getDataFunc={() => getLocalStorageData("message")}
+        resourceName={"message"}
+      >
+        <TextComponent />
+      </DataSource>
     </>
   );
 }
