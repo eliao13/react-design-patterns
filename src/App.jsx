@@ -24,6 +24,15 @@ import withUser from "./higher-order-components/withUser";
 import { UserInfoForm } from "./container-components/UserInfoForm";
 import CustomHookUserInfo from "./custom-hooks/CustomHookUserInfo";
 import CustomHookProductInfo from "./custom-hooks/CustomHookProductInfo";
+import RecursiveComponent from "./functional-programming/RecursiveComponent";
+import {
+  BigSuccessButton,
+  DangerButton,
+} from "./functional-programming/composition";
+import {
+  PartiallyApplyBigSuccessButton,
+  PartiallyApplyDangerButton,
+} from "./functional-programming/partiallyApply";
 
 const pageSections = [
   {
@@ -45,6 +54,10 @@ const pageSections = [
   {
     id: "custom-hooks",
     title: "Custom Hooks",
+  },
+  {
+    id: "functional-programming",
+    title: "Functional Programming",
   },
 ];
 
@@ -158,6 +171,29 @@ function StepFour({ goToNext }) {
 const UserInfoWrapped = printProps(UserInfo);
 
 const UserInfoWithLoader = withUser(UserInfo, "4");
+
+//* Functional Programming
+const nestedObject = {
+  a: 1,
+  b: {
+    b1: 4,
+    b2: {
+      b23: "Hello",
+    },
+    b3: {
+      b31: {
+        message: "Hi",
+      },
+      b32: {
+        message: "Hey",
+      },
+    },
+  },
+  c: {
+    c1: 5,
+    c2: 6,
+  },
+};
 
 function App() {
   const [shouldShowModal, setShouldShowModal] = useState(false);
@@ -332,6 +368,17 @@ function App() {
       <CustomHookProductInfo productId={15} />
       <CustomHookProductInfo productId={25} />
       <CustomHookProductInfo productId={35} />
+
+      <h1 id="functional-programming">Functional Programming</h1>
+
+      {/* Functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data */}
+
+      <RecursiveComponent data={nestedObject} />
+
+      <DangerButton text="Don't do it!" />
+      <BigSuccessButton text="Yes!!" />
+      <PartiallyApplyDangerButton text="Don't do it!!!!!!" />
+      <PartiallyApplyBigSuccessButton text="No!!!!!!" />
     </>
   );
 }
