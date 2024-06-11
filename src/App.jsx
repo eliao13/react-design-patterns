@@ -22,6 +22,31 @@ import ControlledOnboardingFlow from "./controlled-uncontrolled-components/Contr
 import printProps from "./higher-order-components/printProps";
 import withUser from "./higher-order-components/withUser";
 import { UserInfoForm } from "./container-components/UserInfoForm";
+import CustomHookUserInfo from "./custom-hooks/CustomHookUserInfo";
+import CustomHookProductInfo from "./custom-hooks/CustomHookProductInfo";
+
+const pageSections = [
+  {
+    id: "layout-components",
+    title: "Layout Components",
+  },
+  {
+    id: "container-components",
+    title: "Container Components",
+  },
+  {
+    id: "controlled-uncontrolled-components",
+    title: "Controlled and Uncontrolled Components",
+  },
+  {
+    id: "higher-order-components",
+    title: "Higher-Order Components",
+  },
+  {
+    id: "custom-hooks",
+    title: "Custom Hooks",
+  },
+];
 
 //* Split Screen Layout Component
 function LeftHandComponent({ name }) {
@@ -146,9 +171,13 @@ function App() {
 
   return (
     <>
-      <a href="#layout-components">Layout Components</a>
-      <a href="#container-components">Container Components</a>
-      <a href=""></a>
+      <ul style={{ listStyle: "none", padding: "0" }}>
+        {pageSections.map((section) => (
+          <li key={section.id}>
+            <a href={`#${section.id}`}>{section.title}</a>
+          </li>
+        ))}
+      </ul>
 
       <h1 id="layout-components">Layout Components</h1>
 
@@ -239,7 +268,9 @@ function App() {
         <TextComponent />
       </DataSource>
 
-      <h1 id="container-components">Controlled and Uncontrolled Components</h1>
+      <h1 id="controlled-uncontrolled-components">
+        Controlled and Uncontrolled Components
+      </h1>
 
       {/* Uncontrolled components are components that keep track of their own states and release data only when some event occurs */}
       {/* Controlled components are components that do not keep track of their own state--all state is passed in as props */}
@@ -278,6 +309,8 @@ function App() {
         <StepFour />
       </ControlledOnboardingFlow>
 
+      <h1 id="higher-order-components">Higher-Order Components</h1>
+
       {/* Higher-order components are functions that return compoonents */}
       {/* HOCs are used for sharing complex behaviour between multiple components + adding extra functionality to existing components */}
 
@@ -286,6 +319,19 @@ function App() {
       <UserInfoWithLoader />
 
       <UserInfoForm />
+
+      <h1 id="custom-hooks">Custom Hooks</h1>
+
+      {/* Custom Hooks are special hooks we define ourselves, and that usually combine the functionality of one or more existing React hooks */}
+      {/* Custom Hooks are used for sharing complex behaviour between multiple components */}
+
+      <CustomHookUserInfo userId={15} />
+      <CustomHookUserInfo userId={25} />
+      <CustomHookUserInfo userId={35} />
+
+      <CustomHookProductInfo productId={15} />
+      <CustomHookProductInfo productId={25} />
+      <CustomHookProductInfo productId={35} />
     </>
   );
 }
