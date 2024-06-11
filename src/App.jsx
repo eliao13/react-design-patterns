@@ -19,6 +19,9 @@ import Modal from "./layout-components/modal-components/Modal";
 import SplitScreen from "./layout-components/split-screen-components/SplitScreen";
 import UncontrolledOnboardingFlow from "./controlled-uncontrolled-components/UncontrolledOnboardingFlow";
 import ControlledOnboardingFlow from "./controlled-uncontrolled-components/ControlledOnboardingFlow";
+import printProps from "./higher-order-components/printProps";
+import withUser from "./higher-order-components/withUser";
+import { UserInfoForm } from "./container-components/UserInfoForm";
 
 //* Split Screen Layout Component
 function LeftHandComponent({ name }) {
@@ -126,6 +129,11 @@ function StepFour({ goToNext }) {
   );
 }
 
+//* Higher-Order Components
+const UserInfoWrapped = printProps(UserInfo);
+
+const UserInfoWithLoader = withUser(UserInfo, "4");
+
 function App() {
   const [shouldShowModal, setShouldShowModal] = useState(false);
   const [onboardingData, setOnboardingData] = useState({});
@@ -204,21 +212,21 @@ function App() {
       {/* Resource Loader component allows for loading different types of resources from a server */}
 
       <ResourceLoader
-        resourceUrl="http://dummyjson.com/users/1"
+        resourceUrl="https://dummyjson.com/users/1"
         resourceName="user"
       >
         <UserInfo />
       </ResourceLoader>
 
       <ResourceLoader
-        resourceUrl="http://dummyjson.com/products/1"
+        resourceUrl="https://dummyjson.com/products/1"
         resourceName="product"
       >
         <ProductInfo />
       </ResourceLoader>
 
       <DataSource
-        getDataFunc={() => getServerData("http://dummyjson.com/users/10")}
+        getDataFunc={() => getServerData("https://dummyjson.com/users/10")}
         resourceName="user"
       >
         <UserInfo />
@@ -269,6 +277,15 @@ function App() {
         {onboardingData.age >= 62 && <StepThree />}
         <StepFour />
       </ControlledOnboardingFlow>
+
+      {/* Higher-order components are functions that return compoonents */}
+      {/* HOCs are used for sharing complex behaviour between multiple components + adding extra functionality to existing components */}
+
+      <UserInfoWrapped a={1} b="Hello" c={{ name: "Sam" }} />
+
+      <UserInfoWithLoader />
+
+      <UserInfoForm />
     </>
   );
 }

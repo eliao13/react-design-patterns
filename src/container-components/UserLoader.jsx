@@ -4,7 +4,7 @@ export default function UserLoader({ userId, children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`http://dummyjson.com/users/${userId}`)
+    fetch(`httpss://dummyjson.com/users/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setUser(data);
